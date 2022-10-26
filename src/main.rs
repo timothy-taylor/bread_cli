@@ -1,38 +1,8 @@
-use std::fmt;
+pub mod flour;
+pub mod yeast;
 
-#[derive(Debug)]
-pub enum Yeast {
-    Instant(f64),
-    Starter(f64),
-}
-
-impl fmt::Display for Yeast {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (s, x) = match self {
-            Yeast::Instant(x) => ("instant yeast", x),
-            Yeast::Starter(x) => ("sourdough starter", x),
-        };
-        write!(f, "{}: {}", s, x)
-    }
-}
-
-#[derive(Debug)]
-pub enum Flour {
-    AP(f64),
-    Bread(f64),
-    WW(f64),
-}
-
-impl fmt::Display for Flour {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (s, x) = match self {
-            Flour::AP(x) => ("ap", x),
-            Flour::Bread(x) => ("bread", x),
-            Flour::WW(x) => ("whole wheat", x),
-        };
-        write!(f, "{} flour: {} grams", s, x)
-    }
-}
+use crate::flour::Flour;
+use crate::yeast::Yeast;
 
 #[derive(Debug)]
 pub struct Recipe {
@@ -101,21 +71,6 @@ impl Recipe {
     }
 
     pub fn remap_for_altiude(&self, altitude: f64) -> Recipe {
-        /*
-        if altitude < 3000_f64 {
-            return Recipe {
-                name: self.name,
-                flour: self.flour,
-                salt: self.salt,
-                water: self.water,
-                yeast: self.yeast,
-                enrichments: self.enrichments,
-                _base: self._base,
-                high_altitude: self.high_altitude,
-            };
-        }
-        */
-
         let high_altitude: Option<f64> = Some(altitude);
         let flour: Vec<Flour> = self
             .flour
@@ -280,8 +235,8 @@ fn main() {
     //
     // call remap with altitude with your alitude in feet
     // don't use remap for altitude at less than 3000 feet
-    let altitude_recipe = new_recipe.remap_for_altiude(7000_f64);
+    // let altitude_recipe = new_recipe.remap_for_altiude(7000_f64);
 
     print_recipe(new_recipe);
-    print_recipe(altitude_recipe);
+    // print_recipe(altitude_recipe);
 }

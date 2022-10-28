@@ -63,6 +63,18 @@ impl Recipe {
             _base: false,
         }
     }
+
+    pub fn print_recipe(&self) {
+        println!("///////////////////////");
+        println!("[{}]", self.name);
+        self.flour.iter().for_each(|f| println!("{}", f));
+        println!("salt: {} grams", self.salt);
+        println!("water: {} grams", self.water);
+        println!("{} grams", self.yeast);
+        match &self.enrichments {
+            None => (),
+            Some(x) => x.iter().for_each(|e| println!("{}: {} grams", e.0, e.1)),
+        };
+        println!("///////////////////////");
+    }
 }
-
-

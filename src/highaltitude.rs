@@ -1,6 +1,6 @@
 use crate::flour::Flour;
-use crate::yeast::Yeast;
 use crate::recipe::Recipe;
+use crate::yeast::Yeast;
 
 #[derive(Debug)]
 pub struct HighAltiudeRecipe {
@@ -16,7 +16,6 @@ pub struct HighAltiudeRecipe {
 
 // the computations here are not accurate at this time,
 // for your sake don't make this bread
-
 impl HighAltiudeRecipe {
     pub fn new(altitude: f64, recipe: Recipe) -> Self {
         let flour: Vec<Flour> = recipe
@@ -54,9 +53,30 @@ impl HighAltiudeRecipe {
             _base: false,
         }
     }
+
+    pub fn print_recipe(&self) {
+        println!("///////////////////////");
+        println!("[{}]", self.name);
+
+        println!("for altitude: {} feet", self.altitude as i64);
+        println!("your rising times are going to be shorter");
+        println!("a cold start may be beneficial");
+        println!("remember to increase baking temperature by 15-25 degrees (F)");
+        println!("and decrease baking time by 5-8 minutes per 30 minutes");
+
+        self.flour.iter().for_each(|f| println!("{}", f));
+        println!("salt: {} grams", self.salt);
+        println!("water: {} grams", self.water);
+        println!("{} grams", self.yeast);
+        match &self.enrichments {
+            None => (),
+            Some(x) => x.iter().for_each(|e| println!("{}: {} grams", e.0, e.1)),
+        };
+        println!("///////////////////////");
+    }
 }
 
-pub fn en_at_alt(name: &'static str, x: f64, alt: f64) -> f64 {
+fn en_at_alt(name: &'static str, x: f64, alt: f64) -> f64 {
     const TBSP_SUGAR: f64 = 12.5;
     const EGG_GRAMS: f64 = 49.8;
 
@@ -115,5 +135,3 @@ fn flour_at_alt(flour: f64, altitude: f64) -> f64 {
 
     flour + TBSP_FLOUR + (remaining.div_euclid(1500_f64) * TBSP_FLOUR)
 }
-
-

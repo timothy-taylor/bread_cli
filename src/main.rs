@@ -3,6 +3,7 @@ pub mod yeast;
 pub mod highaltitude;
 pub mod recipe;
 
+use clap::Parser;
 use crate::highaltitude::HighAltiudeRecipe;
 use crate::recipe::Recipe;
 use crate::flour::Flour;
@@ -29,6 +30,12 @@ pub fn print_altitude_recipe(recipe: HighAltiudeRecipe) {
     println!("///////////////////////");
 }
 
+#[derive(Parser, Debug)]
+struct Args {
+    #[arg(short, long, default_value_t = 500.0)]
+    grams: f64,
+}
+
 pub fn print_recipe(recipe: Recipe) {
     println!("///////////////////////");
     println!("[{}]", recipe.name);
@@ -44,6 +51,8 @@ pub fn print_recipe(recipe: Recipe) {
 }
 
 fn main() {
+    let cli = Args::parse();
+
     let mut enrichments = Vec::new();
 
     // 1. add your enrichments the vector
@@ -80,13 +89,14 @@ fn main() {
     //
     // call remap with the weight in grams
     // of the amount of flour you want to use
-    let new_recipe = base_recipe.remap(500_f64);
+    let new_recipe = base_recipe.remap(cli.grams);
+
     // 4. remap the mapped recipe to a specific altitude
     //
     // call remap with altitude with your alitude in feet
     // don't use remap for altitude at less than 3000 feet
-    let altiude_recipe = HighAltiudeRecipe::new(7000_f64, base_recipe.clone());
+    //let altiude_recipe = HighAltiudeRecipe::new(7000_f64, base_recipe.clone());
 
     print_recipe(new_recipe);
-    print_altitude_recipe(altiude_recipe);
+    //print_altitude_recipe(altiude_recipe);
 }
